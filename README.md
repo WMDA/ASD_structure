@@ -1,4 +1,4 @@
-# ASD Structure and function 
+# ASD traits and Cortical structure
 
 This is a repo for all the code used in the ASD structure and function papaer.
 
