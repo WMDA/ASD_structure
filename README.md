@@ -9,4 +9,7 @@ Usage for all scripts is
 python3 behavioural_differences.py
 ~~~
 
+Except for plotting scripts which need to be run in a ipython notebook.
+
+Files expected:
 
