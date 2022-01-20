@@ -1,25 +1,17 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-@author: Daniel
-
-This script is used to analyse extracted cluster means. 
-It works out the direction of significance, effects size and correlates the betas and behavioural measures. 
-It expects the data to be input in a specific format (change the script as necessary).
-
-"""
-
-
 import pandas as pd
 from scipy import stats
 import statsmodels.api as sm
-import functions as fun
 import os 
 from colorama import Fore
+import functions as fun
+
+'''
+Script to analyse cluster direction of signficance for clusters  
+'''
 
 os.chdir() #change this to your local file path
 
-cluster = pd.read_csv('cortical_measures.csv').drop(columns=['mean_curv', 'mean_lgi', 'mean_area','mean_thickness','TotalGrayVol','Total_white_matter'])
+cluster = pd.read_csv('cortical_measures.csv').drop(columns = ['mean_curv', 'mean_lgi', 'mean_area','mean_thickness','TotalGrayVol','Total_white_matter'])
 
 #Splits the dataframe into groups
 group = cluster.groupby('age_adjusted_group')
@@ -82,7 +74,8 @@ for betas in cluster.columns:
             
             mwu_corrp= fun.post_hoc_mwu(aan[betas].dropna(),hc[betas].dropna(),wr[betas].dropna())
             
-            print(Fore.GREEN + f'\nBetas for {betas}'+ Fore.RESET,'\n AAN-HC:',mwu_corrp[0][0],'p= ',mwu_corrp[1][0], 
+            print(Fore.GREEN + f'\nBetas for {betas}'+ Fore.RESET,
+                '\n AAN-HC:',mwu_corrp[0][0],'p= ',mwu_corrp[1][0], 
                 'AAN-WR:', mwu_corrp[0][1], 'p= ',mwu_corrp[1][1], 
                 'HC-WR:', mwu_corrp[0][2], 'p= ',mwu_corrp[1][2]
                  )

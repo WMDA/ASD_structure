@@ -1,12 +1,11 @@
-'''
-Old script to test a mediation effect. However not used in the actual paper
-'''
-
-
 import statsmodels.api as sm
 from statsmodels.stats.mediation import Mediation
 import pandas as pd
 import os
+
+'''
+Old script to test a mediation effect. However not used in the actual paper.
+'''
 
 os.chdir() #change this to your local file path
 
@@ -30,6 +29,6 @@ aan_model)
 print(outcome_model.fit().summary())
 print(mediator_model.fit().summary())
 
-med = Mediation(outcome_model, mediator_model, exposure = "Age", mediator ='BMI_at_scan').fit()
+med = Mediation(outcome_model, mediator_model, exposure = "Age", mediator = 'BMI_at_scan').fit()
 
 print(med.summary())

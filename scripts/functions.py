@@ -1,13 +1,3 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-@author: Daniel 
-
-This script contains all the functions used to analyse the structural data. 
-
-It contains a function to calculate spearmans correlation, cohens d and kruskal test. 
-"""
-
 import pandas as pd
 from scipy import stats
 import math
@@ -15,33 +5,70 @@ import pingouin as pin
 from statsmodels.stats import multitest
 import numpy as np
 
-def post_hoc_mwu(x,y,z, fwe_method=''):
-    x_y=pin.mwu(x,y)
-    x_z=pin.mwu(x,z)
-    y_z=pin.mwu(y,z)
-    corrp= multitest.multipletests(np.concatenate((x_y['p-val'].values,x_z['p-val'].values, y_z['p-val'].values )), method=fwe_method)
+"""
+This script contains all the functions used to analyse the structural data. 
+
+Function to calculate spearmans correlation, cohens d and kruskal test. 
+"""
+
+
+def post_hoc_mwu(group1, group2, group3, fwe_method = 'holm-sidak'):
+    
+    '''
+    Function that runs man whiteny u tests corrected for multiple comparisons 
+
+    Parameters
+    ------------
+
+    group1 : array, Pandas series of data for 1st group
+    group2 : array, Pandas series of data for 2nd group
+    group3 : array, Pandas series of data for 3rd group
+    fwe_method: str, method to control fwe rate (optional, default is holm-sidak)
+    
+    
+    Returns
+    ----------
+    corrp : dict like object of corrected pvals
+    '''
+
+
+    group1_group2 = pin.mwu(group1, group2)
+    group1_group3 = pin.mwu(group1, group3)
+    group2_group3 = pin.mwu(group2 , group3)
+
+    corrp= multitest.multipletests(np.concatenate((group1_group2['p-val'].values, group1_group3['p-val'].values, group2_group3['p-val'].values )), method = fwe_method)
     return corrp
 
-def correlation(column, volumearray, volume):
+def correlation(behaviour, volume, volume_name):
     
     '''
     Runs Spearmans correlation.
     
-    Input: df with measures that area all used in the correlation. 
+    Parameters
+    -----------
+    behaviour: Pandas df of behaviours that wish to be correlated against a volume.
+    volume: Pandas df of volumes that wish to be correlated against behaviours
+    volume : str object, name of volume that behaviours will vbe correlated against.
+
+    
+    df with measures that area all used in the correlation. 
     
     Second array/df with thrid variable (string) that states which measure from this second array/df to be used in the correlation.
     
-    Returns: pvalues and correlation values in list
-    
+    Returns: 
+    ---------
+    Pvals : Lists of pvals
+    correlation: List of rho values 
+
     '''
     
     pvalues = []
     correlation = []
-    for i in column.columns:
-        array = pd.concat([volumearray[volume], column[i]],axis=1).dropna()
-        c, p = stats.spearmanr(array[volume], array[i])
-        pvalues.append(p)
-        correlation.append(c)
+    for i in behaviour.columns:
+        array = pd.concat([volume[volume_name], behaviour[i]],axis = 1).dropna()
+        corr, pvals = stats.spearmanr(array[volume], array[i])
+        pvalues.append(pvals)
+        correlation.append(corr)
     return pvalues, correlation
 
 
@@ -51,10 +78,15 @@ def cohen_d(group1,group2):
     '''
     Calculate cohens d.
     
-    Input: two series/list
-    --------------------------
-    
-    Output: d
+    Parameters: 
+    ------------
+    group1: array or pandas series to test for effect size.
+    group2: array or pandas series to test for effect size.
+
+
+    Returns
+    -----------
+    Output: int cohen's d value.
     
     '''
     
@@ -64,22 +96,29 @@ def cohen_d(group1,group2):
     cohend = diff / pooledstdev
     return cohend
 
-def kruskal(x,y,z):
+def kruskal(group1, group2, group3):
     
     '''
     Runs kruskal-wallis test.
     
-    Input: Series from three groups.
-    --------------------------------------
     
-    Output: df with pvals, degrees of freedom and eta/epsilon effect sizes
+    Parameters
+    -----------
+    group1 : array, Pandas series of data for 1st group
+    group2 : array, Pandas series of data for 2nd group
+    group3 : array, Pandas series of data for 3rd group
+
+
+    Returns
+    ----------
+    df : dataframe of pvals, degrees of freedom and eta/epsilon effect sizes.
     
     
     '''
     
-    number_of_observations = len(pd.concat([x,y,z]))
-    number_of_groups = len([x, y, z])
-    h,p = stats.kruskal(x,y,z)
+    number_of_observations = len(pd.concat([group1, group2, group3]))
+    number_of_groups = len([group1, group2, group3])
+    h,p = stats.kruskal(group1, group2, group3)
     degrees_of_freedom = number_of_observations - number_of_groups
     eta = (h-number_of_groups +1)/(number_of_observations-number_of_groups)
     epsilon  = h/((number_of_observations**2 -1) / (number_of_observations +1))
@@ -168,13 +207,31 @@ def mean_values(measures,aan,wr,hc):
     hc_mean_values= dict(zip(['hc_'+ measure for measure in measures], [hc[measure].mean() for measure in measures]))
     hc_std = dict(zip(['hc_std_'+ measure for measure in measures], [hc[measure].std() for measure in measures]))
       
-    value_dict = {**aan_mean_values,**aan_std,**wr_mean_values,**wr_std,**hc_mean_values,**hc_std}
+    value_dict = {**aan_mean_values, **aan_std, **wr_mean_values, **wr_std, **hc_mean_values, **hc_std}
 
     return value_dict
 
 def ttest_mwu(group1,group2):
+
+    '''
+    Function to test for group differences. Will run T-test if assumptions met or run Man Whitney U.
+
+    Parameters
+    ----------
+    group1 : array, Pandas series of data for 1st group
+    group2 : array, Pandas series of data for 2nd group
+    
+    Returns
+    ----------
+    test: df of either mann whiteney U results or T-Test
+
+    '''
+
+
+
     if stats.normaltest(group1.dropna()) and stats.normaltest(group2.dropna()) and stats.levene(group1.dropna(), group2.dropna())[1] > 0.05:
         test= pin.ttest(group1.dropna(),group2.dropna())
+    
     else:
         test = pin.mwu(group1.dropna(),group2.dropna())
     

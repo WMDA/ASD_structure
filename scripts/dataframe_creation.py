@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jun 30 10:33:08 2021
-
-@author: Daniel
-"""
 import pandas as pd
 import os
+
+'''
+Script to create the cortical_measures.csv needed for other scripts.
+Input data needs to be in set format (see README.md)
+'''
 
 os.chdir() #change this to your local file path
 

@@ -1,9 +1,18 @@
 import pandas as pd
-import functions as fun
 from statsmodels.stats import multitest
 import numpy as np
 from colorama import Fore
 import os
+import functions as fun
+
+'''
+This script runs correlations between global measures and behavioural measures using spearmans r
+
+Not very well written (too many variables!!) but does the job.
+
+Prints a dictionary with pvals corrected for multiple comparisons and rho values
+'''
+
 
 os.chdir() #change this to your local file path
 
@@ -11,7 +20,7 @@ global_measures = pd.read_csv('cortical_measures.csv')
 behavioural = pd.read_csv('behavioural_results.csv')
 
 corr_df = pd.concat([global_measures,behavioural[['BMI_at_scan','Initial_EDE_Q_Total','IQ', 'ADOS_com_soc', 
-            'ADOS_Creativity','ADOS_sterotyped_and_repetititve','Illness_duration']]], axis=1)
+            'ADOS_Creativity','ADOS_sterotyped_and_repetititve','Illness_duration']]], axis = 1)
 
 group = corr_df.groupby('age_adjusted_group')
 hc = group.get_group('HC')
@@ -56,9 +65,11 @@ hc_ccp, hc_ccr = fun.correlation(behavioural_correlations_hc, global_measures_co
 hc_lgip, hc_lgir = fun.correlation(behavioural_correlations_hc, global_measures_correlation_hc, 'mean_lgi')
 hc_csap, hc_csar = fun.correlation(behavioural_correlations_hc, global_measures_correlation_hc, 'mean_area')
 
-corrp_global_measures = multitest.multipletests(np.concatenate((aan_gmvp,aan_wmvp, aan_ctp,aan_ccp,aan_lgip,aan_csap, 
-                                                               wr_gmvp,wr_wmvp, wr_ctp, wr_ccp,wr_lgip,wr_csap, 
-                                                               hc_gmvp, hc_wmvp, hc_ctp, hc_ccp, hc_lgip,hc_csap)))
+corrp_global_measures = multitest.multipletests(np.concatenate((
+                                                               aan_gmvp, aan_wmvp, aan_ctp,aan_ccp, aan_lgip, aan_csap, 
+                                                               wr_gmvp,wr_wmvp, wr_ctp, wr_ccp, wr_lgip, wr_csap, 
+                                                               hc_gmvp, hc_wmvp, hc_ctp, hc_ccp, hc_lgip,hc_csap
+                                                               )))
 
 aan_keys_measures = ['AAN_'+ measure for measure in behavioural_correlations_aan.columns] 
 aan_keys_global = [measure for measure in global_measures_correlation_aan.columns]
@@ -71,7 +82,8 @@ hc_keys_global = [measure for measure in global_measures_correlation_hc.columns]
 
 
 
-dictionary_keys=[]
+dictionary_keys = []
+
 for glob in aan_keys_global:
     for measure in aan_keys_measures:
         dictionary_keys.append(measure + '_' + glob)
@@ -88,7 +100,7 @@ p_vals= dict(zip(dictionary_keys,corrp_global_measures[1]))
 
 r2_vals = aan_gmvr + aan_wmvr + aan_ctr + aan_ccr + aan_lgir + aan_csar + wr_gmvr + wr_wmvr + wr_ctr + wr_ccr + wr_lgir + wr_csar +  hc_gmvr + hc_wmvr + hc_ctr + hc_ccr + hc_lgir + hc_csar
  
-r2_val_dict = dict(zip(dictionary_keys,r2_vals))
+r2_val_dict = dict(zip(dictionary_keys, r2_vals))
 
 print(Fore.MAGENTA + '\nPvals for correlation\n' + Fore.RESET)
 for key, val in p_vals.items():
