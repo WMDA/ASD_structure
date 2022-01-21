@@ -20,25 +20,27 @@ global_measures = pd.read_csv('cortical_measures.csv')
 behavioural = pd.read_csv('behavioural_results.csv')
 
 corr_df = pd.concat([global_measures,behavioural[['BMI_at_scan','Initial_EDE_Q_Total','IQ', 'ADOS_com_soc', 
-            'ADOS_Creativity','ADOS_sterotyped_and_repetititve','Illness_duration']]], axis = 1)
+                                                  'ADOS_Creativity','ADOS_sterotyped_and_repetititve','Illness_duration']]], 
+                                                  axis=1)
 
 group = corr_df.groupby('age_adjusted_group')
 hc = group.get_group('HC')
 aan = group.get_group('AAN')
 wr = group.get_group('WR')
 
-behavioural_correlations_aan= aan[['Illness_duration',
-       'Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
-      'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+behavioural_correlations_aan = aan[['Illness_duration','Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
+                                     'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+
 global_measures_correlation_aan = aan[['TotalGrayVol','Total_white_matter', 'mean_thickness','mean_curv','mean_lgi','mean_area' ]]
 
-behavioural_correlations_wr= wr[['Illness_duration',
-       'Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
-      'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+behavioural_correlations_wr = wr[['Illness_duration','Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
+                                  'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+
 global_measures_correlation_wr = wr[['TotalGrayVol','Total_white_matter', 'mean_thickness','mean_curv','mean_lgi','mean_area' ]]
 
 behavioural_correlations_hc = hc[['Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
-      'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+                                  'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+
 global_measures_correlation_hc = hc[['TotalGrayVol','Total_white_matter', 'mean_thickness','mean_curv','mean_lgi','mean_area']]
 
 aan_gmvp, aan_gmvr = fun.correlation(behavioural_correlations_aan, global_measures_correlation_aan, 'TotalGrayVol')

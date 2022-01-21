@@ -11,7 +11,7 @@ os.chdir() #change this to your local file path
 
 cortical = pd.read_csv('cortical_measures.csv')
 b_df = pd.read_csv('behavioural_results.csv')
-plotting_df = pd.concat([cortical, b_df[['BMI_at_scan','ADOS_sterotyped_and_repetititve']]],axis=1)
+plotting_df = pd.concat([cortical, b_df[['BMI_at_scan','ADOS_sterotyped_and_repetititve']]], axis=1)
 
 group = plotting_df.groupby('age_adjusted_group')
 hc = group.get_group('HC')
@@ -29,6 +29,6 @@ aan_model)
 print(outcome_model.fit().summary())
 print(mediator_model.fit().summary())
 
-med = Mediation(outcome_model, mediator_model, exposure = "Age", mediator = 'BMI_at_scan').fit()
+med = Mediation(outcome_model, mediator_model, exposure="Age", mediator='BMI_at_scan').fit()
 
 print(med.summary())

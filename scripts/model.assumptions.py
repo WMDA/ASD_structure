@@ -21,7 +21,7 @@ model = pd.concat([df[['G-Number','age_adjusted_group','Age']],voxel_df],axis=1)
 
 groups = pd.get_dummies(model['age_adjusted_group'])
 
-model = pd.concat([model,groups],axis=1)
+model = pd.concat([model,groups], axis=1)
 
 X_age = model[['voxel','AAN','HC','WR','Age']]  
 

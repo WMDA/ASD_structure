@@ -12,7 +12,7 @@ Function to calculate spearmans correlation, cohens d and kruskal test.
 """
 
 
-def post_hoc_mwu(group1, group2, group3, fwe_method = 'holm-sidak'):
+def post_hoc_mwu(group1, group2, group3, fwe_method='holm-sidak'):
     
     '''
     Function that runs man whiteny u tests corrected for multiple comparisons 
@@ -36,7 +36,7 @@ def post_hoc_mwu(group1, group2, group3, fwe_method = 'holm-sidak'):
     group1_group3 = pin.mwu(group1, group3)
     group2_group3 = pin.mwu(group2 , group3)
 
-    corrp= multitest.multipletests(np.concatenate((group1_group2['p-val'].values, group1_group3['p-val'].values, group2_group3['p-val'].values )), method = fwe_method)
+    corrp= multitest.multipletests(np.concatenate((group1_group2['p-val'].values, group1_group3['p-val'].values, group2_group3['p-val'].values )), method=fwe_method)
     return corrp
 
 def correlation(behaviour, volume, volume_name):
@@ -65,7 +65,7 @@ def correlation(behaviour, volume, volume_name):
     pvalues = []
     correlation = []
     for i in behaviour.columns:
-        array = pd.concat([volume[volume_name], behaviour[i]],axis = 1).dropna()
+        array = pd.concat([volume[volume_name], behaviour[i]], axis=1).dropna()
         corr, pvals = stats.spearmanr(array[volume], array[i])
         pvalues.append(pvals)
         correlation.append(corr)
@@ -92,7 +92,7 @@ def cohen_d(group1,group2):
     
     
     diff = group1.mean() - group2.mean()
-    pooledstdev = math.sqrt((group1.std()**2 + group2.std())/2 )
+    pooledstdev = math.sqrt((group1.std()**2 + group2.std())/2)
     cohend = diff / pooledstdev
     return cohend
 
@@ -126,7 +126,7 @@ def kruskal(group1, group2, group3):
     return df
 
 
-def multi_comparisons(dictionary,aan,wr,hc):
+def multi_comparisons(dictionary, aan, wr, hc):
 
     '''
     Function to test if parametric or non-parametric multi comparisons test should be used

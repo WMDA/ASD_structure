@@ -11,7 +11,7 @@ Script to analyse cluster direction of signficance for clusters
 
 os.chdir() #change this to your local file path
 
-cluster = pd.read_csv('cortical_measures.csv').drop(columns = ['mean_curv', 'mean_lgi', 'mean_area','mean_thickness','TotalGrayVol','Total_white_matter'])
+cluster = pd.read_csv('cortical_measures.csv').drop(columns=['mean_curv', 'mean_lgi', 'mean_area','mean_thickness','TotalGrayVol','Total_white_matter'])
 
 #Splits the dataframe into groups
 group = cluster.groupby('age_adjusted_group')
@@ -33,7 +33,7 @@ for betas in cluster.columns:
         
         if stats.normaltest(aan[betas].dropna()) and stats.normaltest(wr[betas].dropna()) and stats.normaltest(hc[betas].dropna()) and stats.levene(aan[betas].dropna(), wr[betas].dropna(),hc[betas].dropna())[1] > 0.05:
             
-            multi_test= sm.stats.multicomp.pairwise_tukeyhsd(cluster[betas],cluster['age_adjusted_group'])
+            multi_test= sm.stats.multicomp.pairwise_tukeyhsd(cluster[betas], cluster['age_adjusted_group'])
             
             print(Fore.GREEN + f'\n{betas}' + Fore.RESET, multi_test.summary())
 
@@ -72,7 +72,7 @@ for betas in cluster.columns:
     
         else:
             
-            mwu_corrp= fun.post_hoc_mwu(aan[betas].dropna(),hc[betas].dropna(),wr[betas].dropna())
+            mwu_corrp= fun.post_hoc_mwu(aan[betas].dropna(), hc[betas].dropna(), wr[betas].dropna())
             
             print(Fore.GREEN + f'\nBetas for {betas}'+ Fore.RESET,
                 '\n AAN-HC:',mwu_corrp[0][0],'p= ',mwu_corrp[1][0], 
@@ -84,10 +84,10 @@ for betas in cluster.columns:
 
                 if mean['aan_'+ betas] > mean['hc_' + betas]:
                                     
-                    aan_hc= fun.cohen_d(aan[betas].dropna(),hc[betas].dropna())
+                    aan_hc = fun.cohen_d(aan[betas].dropna(), hc[betas].dropna())
                               
                 else:
-                    aan_hc= fun.cohen_d(hc[betas].dropna(),aan[betas].dropna())
+                    aan_hc= fun.cohen_d(hc[betas].dropna(), aan[betas].dropna())
                         
                     print(Fore.GREEN+ f'\nCohens d between AAN and HC for {betas}:' + Fore.RESET, aan_hc)
 
@@ -95,10 +95,10 @@ for betas in cluster.columns:
                               
                     if mean['aan_'+ betas] > mean['wr_' + betas]:
                                     
-                        aan_wr= fun.cohen_d(aan[betas].dropna(),wr[betas].dropna())
+                        aan_wr= fun.cohen_d(aan[betas].dropna(), wr[betas].dropna())
                               
                     else:
-                        aan_wr= fun.cohen_d(wr[betas].dropna(),aan[betas].dropna())
+                        aan_wr= fun.cohen_d(wr[betas].dropna(), aan[betas].dropna())
                         
                     print(Fore.GREEN + f'\nCohens d between AAN and WR for {betas}:' + Fore.RESET, aan_wr)
 
@@ -107,10 +107,10 @@ for betas in cluster.columns:
                               
                     if mean['hc_'+ betas] > mean['wr_' + betas]:
 
-                        hc_wr= fun.cohen_d(hc[betas].dropna(),wr[betas].dropna())
+                        hc_wr= fun.cohen_d(hc[betas].dropna(), wr[betas].dropna())
                               
                     else:
-                        hc_wr= fun.cohen_d(wr[betas].dropna(),hc[betas].dropna())
+                        hc_wr= fun.cohen_d(wr[betas].dropna(), hc[betas].dropna())
                          
                     print(Fore.GREEN+ f'\nCohens d between HC and Wr for {betas}:' + Fore.RESET, hc_wr)
 

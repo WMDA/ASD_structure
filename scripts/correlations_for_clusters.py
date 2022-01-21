@@ -16,29 +16,30 @@ Prints a dictionary with pvals corrected for multiple comparisons and rho values
 
 os.chdir() #change this to your local file path
 
-global_measures = pd.read_csv('cortical_measures.csv').drop(columns = ['mean_curv', 'mean_lgi', 'mean_area','mean_thickness','TotalGrayVol','Total_white_matter'])
+global_measures = pd.read_csv('cortical_measures.csv').drop(columns=['mean_curv', 'mean_lgi', 'mean_area','mean_thickness','TotalGrayVol','Total_white_matter'])
 behavioural = pd.read_csv('/home/wmda/Documents/Documents_from_old_comp/BEACON/Write_up/Cortical/results/behavioural_results.csv')
 
-corr_df = pd.concat([global_measures,behavioural[['BMI_at_scan','Initial_EDE_Q_Total','IQ', 'ADOS_com_soc', 
-            'ADOS_Creativity','ADOS_sterotyped_and_repetititve','Illness_duration']]], axis = 1)
+corr_df = pd.concat([global_measures,behavioural[['BMI_at_scan','Initial_EDE_Q_Total','IQ', 'ADOS_com_soc', 'ADOS_Creativity',
+                                                  'ADOS_sterotyped_and_repetititve','Illness_duration']]], axis=1)
 
 group = corr_df.groupby('age_adjusted_group')
 hc = group.get_group('HC')
 aan = group.get_group('AAN')
 wr = group.get_group('WR')
 
-behavioural_correlations_aan= aan[['Illness_duration',
-       'Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
-      'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+behavioural_correlations_aan = aan[['Illness_duration', 'Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
+                                   'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+
 global_measures_correlation_aan = aan[['postcentral','supramarginal']]
 
-behavioural_correlations_wr= wr[['Illness_duration',
-       'Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
-      'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+behavioural_correlations_wr = wr[['Illness_duration','Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
+                                  'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+
 global_measures_correlation_wr = wr[['postcentral','supramarginal']]
 
-behavioural_correlations_hc = hc[['Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity',
-      'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+behavioural_correlations_hc = hc[['Initial_EDE_Q_Total', 'ADOS_com_soc','ADOS_Creativity', 
+                                  'ADOS_sterotyped_and_repetititve','BMI_at_scan','Age']]
+
 global_measures_correlation_hc = hc[['postcentral','supramarginal']]
 
 aan_c1p, aan_c1r = fun.correlation(behavioural_correlations_aan, global_measures_correlation_aan, 'postcentral')
@@ -91,5 +92,3 @@ for key, val in p_vals.items():
 print(Fore.MAGENTA + '\n Rsquared for correlation \n' + Fore.RESET)
 for key, val in r2_val_dict.items():
     print(Fore.YELLOW + key + Fore.RESET, ':', val)
-
-

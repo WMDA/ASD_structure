@@ -43,14 +43,14 @@ lgi = pd.concat([lgi_com,mean_lgi],axis=1).rename(columns={0:'mean_lgi'})
 
 
 #thickness
-left_thickness = pd.read_csv('lh_thickness.dat')#,sep='\t')
+left_thickness = pd.read_csv('lh_thickness.dat')
 right_thickness = pd.read_csv('rh_thickness.dat', sep='\t')
-thickness = pd.concat([left_thickness,right_thickness],axis=1)
+thickness = pd.concat([left_thickness,right_thickness], axis=1)
 mean_thickness = thickness[['rh_MeanThickness_thickness','lh_MeanThickness_thickness']].mean(axis=1)
-thickness = pd.concat([thickness,mean_thickness],axis=1).rename(columns={0:'mean_thickness'})
+thickness = pd.concat([thickness,mean_thickness], axis=1).rename(columns={0:'mean_thickness'})
 
 #Any cluster
-cluster = pd.read_csv('/home/wmda/Documents/Documents_from_old_comp/BEACON/Write_up/Cortical/results/rh_lgi_cluster_parameters.csv',sep='\s+')
+cluster = pd.read_csv('/home/wmda/Documents/Documents_from_old_comp/BEACON/Write_up/Cortical/results/rh_lgi_cluster_parameters.csv', sep='\s+')
 
 #Concats the dataframes into one useful dataframe
 cortical_measures = pd.concat([behaviour_df[['G-Number','age_adjusted_group' ,'Age']],curv['mean_curv'], lgi['mean_lgi'], 

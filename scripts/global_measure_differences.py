@@ -11,8 +11,6 @@ This is a script to test for group differences and effect sizes for cortical thi
 gray matter & white matter volume. 
 """
 
-
-
 os.chdir() #change this to your local file path
 
 #Reads in the behavioural dataframe
@@ -34,9 +32,9 @@ anova_list = [measure for measure in measures if stats.normaltest((ols(f'{measur
 kruskal_list = [measure for measure in measures if measure not in anova_list]
 
 
-anova_results_dict = dict(zip(anova_list,[sm.stats.anova_lm(ols(f'{measure} ~ age_adjusted_group', data= global_measures).fit(), typ = 1) for measure in anova_list]))
+anova_results_dict = dict(zip(anova_list,[sm.stats.anova_lm(ols(f'{measure} ~ age_adjusted_group', data= global_measures).fit(), typ=1) for measure in anova_list]))
 
-kruskal_results_dict = dict(zip(kruskal_list,[fun.kruskal(aan[measure].dropna(), hc[measure].dropna(), wr[measure].dropna()) for measure in kruskal_list]))
+kruskal_results_dict = dict(zip(kruskal_list, [fun.kruskal(aan[measure].dropna(), hc[measure].dropna(), wr[measure].dropna()) for measure in kruskal_list]))
 
 aov_res = fun.multi_comparisons(anova_results_dict, aan, wr, hc)
 
@@ -52,7 +50,7 @@ assumptions_check = [aov_res, krus_res]
 
 for assumption in assumptions_check:
 
-      if len(assumption['parametric'])  > 0:
+      if len(assumption['parametric']) > 0:
 
             for measure in assumption['parametric']:
 
@@ -65,10 +63,10 @@ for assumption in assumptions_check:
                               
                         if mean['aan_'+ measure] > mean['hc_' + measure]:
                                     
-                              aan_hc= fun.cohen_d(aan[measure], hc[measure])
+                              aan_hc = fun.cohen_d(aan[measure], hc[measure])
                               
                         else:
-                              aan_hc= fun.cohen_d(hc[measure], aan[measure])
+                              aan_hc = fun.cohen_d(hc[measure], aan[measure])
                         
                        
                         print(Fore.GREEN + f'\nCohens d between AAN and HC for {measure}:' + Fore.RESET, aan_hc)
@@ -77,10 +75,10 @@ for assumption in assumptions_check:
                               
                         if mean['aan_'+ measure] > mean['wr_' + measure]:
                                     
-                              aan_wr= fun.cohen_d(aan[measure], wr[measure])
+                              aan_wr = fun.cohen_d(aan[measure], wr[measure])
                               
                         else:
-                              aan_wr= fun.cohen_d(wr[measure], aan[measure])
+                              aan_wr = fun.cohen_d(wr[measure], aan[measure])
                         
                        
                         print(Fore.GREEN + f'\nCohens d between AAN and wr for {measure}:' + Fore.RESET, aan_wr)
@@ -90,10 +88,10 @@ for assumption in assumptions_check:
                               
                         if mean['hc_'+ measure] > mean['wr_' + measure]:
                                     
-                              hc_wr= fun.cohen_d(hc[measure], wr[measure])
+                              hc_wr = fun.cohen_d(hc[measure], wr[measure])
                               
                         else:
-                              hc_wr= fun.cohen_d(wr[measure], aan[measure])
+                              hc_wr = fun.cohen_d(wr[measure], aan[measure])
                         
                        
                         print(Fore.GREEN + f'\nCohens d between AAN and wr for {measure}:' + Fore.RESET, hc_wr)
@@ -103,7 +101,7 @@ for assumption in assumptions_check:
 
             for measure in assumption['nonparametric']:
 
-                  mwu_corrp= fun.post_hoc_mwu(aan[measure].dropna(), hc[measure].dropna(), wr[measure].dropna())
+                  mwu_corrp = fun.post_hoc_mwu(aan[measure].dropna(), hc[measure].dropna(), wr[measure].dropna())
 
                   print(f'\n{measure}\n AAN-HC:', mwu_corrp[0][0], 'p= ', mwu_corrp[1][0], 'AAN-WR:', mwu_corrp[0][1], 'p= ', mwu_corrp[1][1], 
 
@@ -113,10 +111,10 @@ for assumption in assumptions_check:
 
                         if mean['aan_'+ measure] > mean['hc_' + measure]:
                                     
-                              aan_hc= fun.cohen_d(aan[measure].dropna(), hc[measure].dropna())
+                              aan_hc = fun.cohen_d(aan[measure].dropna(), hc[measure].dropna())
                               
                         else:
-                              aan_hc= fun.cohen_d(hc[measure].dropna(), aan[measure].dropna())
+                              aan_hc = fun.cohen_d(hc[measure].dropna(), aan[measure].dropna())
                         
                        
                         print(Fore.GREEN+ f'\nCohens d between AAN and HC for {measure}:' + Fore.RESET, aan_hc)
@@ -125,10 +123,10 @@ for assumption in assumptions_check:
                               
                         if mean['aan_'+ measure] > mean['wr_' + measure]:
                                     
-                              aan_wr= fun.cohen_d(aan[measure].dropna(), wr[measure].dropna())
+                              aan_wr = fun.cohen_d(aan[measure].dropna(), wr[measure].dropna())
                               
                         else:
-                              aan_wr= fun.cohen_d(wr[measure].dropna(), aan[measure].dropna())
+                              aan_wr = fun.cohen_d(wr[measure].dropna(), aan[measure].dropna())
                         
                        
                         print(Fore.GREEN + f'\nCohens d between AAN and WR for {measure}:' + Fore.RESET, aan_wr)
@@ -138,10 +136,10 @@ for assumption in assumptions_check:
                               
                         if mean['hc_'+ measure] > mean['wr_' + measure]:
 
-                              hc_wr= fun.cohen_d(hc[measure].dropna(), wr[measure].dropna())
+                              hc_wr = fun.cohen_d(hc[measure].dropna(), wr[measure].dropna())
                               
                         else:
-                              hc_wr= fun.cohen_d(wr[measure].dropna(), hc[measure].dropna())
+                              hc_wr = fun.cohen_d(wr[measure].dropna(), hc[measure].dropna())
                         
                        
                         print(Fore.GREEN+ f'\nCohens d between HC and Wr for {measure}:' + Fore.RESET, hc_wr)
@@ -150,4 +148,3 @@ for assumption in assumptions_check:
 print(Fore.MAGENTA + '\nMean and STD for Global Measures: \n'+ Fore.RESET)
 for key, val in mean.items():
       print(Fore.CYAN + key + Fore.RESET,':',val)
-
