@@ -1,13 +1,15 @@
-import pandas as pd
-import os
-
 '''
 Script to create the cortical_measures.csv needed for other scripts.
 Input data needs to be in set format (see README.md)
 '''
 
-os.chdir() #change this to your local file path
+import pandas as pd
+import os
+from decouple import config
 
+data = config('data')
+
+os.chdir(data) 
 
 #Read in behavioural df
 behaviour_df = pd.read_csv('behavioural_results.csv')
@@ -39,8 +41,6 @@ right_lgi = pd.read_csv('rh_lgi.dat',sep='\t')
 lgi_com = pd.concat([left_lgi,right_lgi], axis=1).drop(columns=[ 'BrainSegVolNotVent', 'eTIV','rh.aparc.pial_lgi.thickness'])
 mean_lgi = lgi_com[lgi_com.columns[1:68]].mean(axis=1)
 lgi = pd.concat([lgi_com,mean_lgi],axis=1).rename(columns={0:'mean_lgi'})
-
-
 
 #thickness
 left_thickness = pd.read_csv('lh_thickness.dat')

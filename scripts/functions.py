@@ -7,7 +7,6 @@ import numpy as np
 
 """
 This script contains all the functions used to analyse the structural data. 
-
 Function to calculate spearmans correlation, cohens d and kruskal test. 
 """
 

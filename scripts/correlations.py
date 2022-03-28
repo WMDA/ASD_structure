@@ -1,20 +1,20 @@
+'''
+This script runs correlations between global measures and behavioural measures using spearmans r
+Not very well written (too many variables!!) but does the job.
+Prints a dictionary with pvals corrected for multiple comparisons and rho values
+'''
+
 import pandas as pd
 from statsmodels.stats import multitest
 import numpy as np
 from colorama import Fore
 import os
 import functions as fun
+from decouple import config
 
-'''
-This script runs correlations between global measures and behavioural measures using spearmans r
+data = config('data')
 
-Not very well written (too many variables!!) but does the job.
-
-Prints a dictionary with pvals corrected for multiple comparisons and rho values
-'''
-
-
-os.chdir() #change this to your local file path
+os.chdir(data) #change this to your local file path
 
 global_measures = pd.read_csv('cortical_measures.csv')
 behavioural = pd.read_csv('behavioural_results.csv')

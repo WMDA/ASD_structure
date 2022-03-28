@@ -1,13 +1,16 @@
-import statsmodels.api as sm
-from statsmodels.stats.mediation import Mediation
-import pandas as pd
-import os
-
 '''
 Old script to test a mediation effect. However not used in the actual paper.
 '''
 
-os.chdir() #change this to your local file path
+import statsmodels.api as sm
+from statsmodels.stats.mediation import Mediation
+import pandas as pd
+import os
+from decouple import config
+
+data = config('data')
+
+os.chdir(data) 
 
 cortical = pd.read_csv('cortical_measures.csv')
 b_df = pd.read_csv('behavioural_results.csv')
