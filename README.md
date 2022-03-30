@@ -42,3 +42,13 @@ aparcstats2table command:
 	- rh_lgi.dat
 	- lh_thickness.dat
 	- rh_thickness.dat
+
+## Enviornment
+
+The scripts in this repo get the eniormental variables from a .env (not included in the repo). Create a .env file with the following set up:
+
+```
+data=<path to data folder>
+```
+
+to allow for scripts to be ran correctly.
