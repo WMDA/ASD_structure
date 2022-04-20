@@ -13,7 +13,6 @@ from decouple import config
 
 data = config('data')
 
-
 os.chdir(data)
 df = pd.read_csv('behavioural_results.csv')
 
@@ -30,8 +29,6 @@ mean = fun.mean_values(measures,aan,wr,hc)
 anova_list = [measure for measure in measures if stats.normaltest((ols(f'{measure} ~ age_adjusted_group', data=df).fit().resid))[1] > 0.05
               and stats.levene(aan[measure].dropna(), wr[measure].dropna(), hc[measure].dropna())[1] > 0.05] 
               
-print(anova_list)
-
 kruskal_list = [measure for measure in measures if measure not in anova_list]
 
 anova_results_dict = dict(zip(anova_list,[sm.stats.anova_lm(ols(f'{measure} ~ age_adjusted_group', data = df).fit(), typ=1) for measure in anova_list]))

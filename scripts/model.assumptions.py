@@ -1,4 +1,4 @@
-import nibabel as nb
+#mport nibabel as nb
 import numpy as np
 import pandas as pd
 from statsmodels.stats.outliers_influence import variance_inflation_factor
@@ -7,7 +7,7 @@ from decouple import config
 
 data = config('data')
 os.chdir(data) 
-
+print(data)
 img = nb.load('eres.mgh')
 df = pd.read_csv('behavioural_results.csv')
 data = img.get_fdata()
