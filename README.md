@@ -1,6 +1,8 @@
 # Examining the Relationship Between Autistic Spectrum Disorder Characteristics and Structural Brain Differences seen in Anorexia Nervosa.
 
-This is a repo for all the code used in this paper.
+This is a repo for all the code used in this paper, which can be read here
+
+https://onlinelibrary.wiley.com/doi/10.1002/erv.2910
 
 Usage for all scripts in scripts folder is: 
 
